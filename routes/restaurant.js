@@ -21,6 +21,7 @@ router.get
 				.then((querySnapshot) => querySnapshot.data());
 
 			const categories = restDetails.categories;
+			console.log(categories);
 			console.log(restDetails.categories);
 
 			res.render("restaurant-home", {restId, restDetails, categories });
