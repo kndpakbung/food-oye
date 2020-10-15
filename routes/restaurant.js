@@ -8,93 +8,61 @@ const router = express.Router();
 
 
 router.get
-(
-	"/home/:restaurantId",
-	async (req, res) =>
-	{
-		let restId = req.params.restaurantId;
-
-		const restDetails = await firestore
-		.collection("restaurants")
-		.doc(restId)
-		.get()
-		.then((querySnapshot) => querySnapshot.data());
-		
-		const categories = await firestore
-		.collection("categories")
-		.where("rest_id", "==", restId)
-		.orderBy("name", "asc")
-		.get()
-		.then
-		(
-			(querySnapshot) =>
-			{
-				let categoryArr = [];
-				querySnapshot.forEach
-				(
-					category => categoryArr.push({ id: category.id, ...category.data() })
-				);
-
-				return categoryArr;
-			}
-		);
-		
-		res.render("restaurant-home", { restDetails, categories });
-	}
-);
-
-
-router.get
-(
-	"/dishes/:categoryId",
-	async (req, res) =>
-	{
-		const categoryId = req.params.categoryId;
-		
-		const categoryDetails = await firestore
-			.collection("categories")
-			.doc(categoryId)
-			.get()
-			.then(e => e.data());
-		
-		const restaurantDetails = await firestore
-			.collection("restaurants")
-			.doc(categoryDetails.rest_id)
-			.get()
-			.then(e => e.data());
-		
-		const dishes = await firestore
-			.collection("dishes")
-			.where("category_id", "==", categoryId)
-			.orderBy("name", "asc")
-			.get()
-			.then
-			(
-				(querySnapshot) =>
-				{
-					let dishArr = [];
-					querySnapshot.forEach
-					(
-						dish => dishArr.push({ id: dish.id, ...dish.data() })
-					);
-
-					return dishArr;
-				}
-			);
+	(
+		"/:restaurantId",
+		async (req, res) => {
+			let restId = req.params.restaurantId;
 			
-		res.render("dishes", { restaurantDetails, categoryDetails, dishes });
-	}
-);
+
+			const restDetails = await firestore
+				.collection("restaurants")
+				.doc(restId)
+				.get()
+				.then((querySnapshot) => querySnapshot.data());
+
+			const categories = restDetails.categories;
+			console.log(restDetails.categories);
+
+			res.render("restaurant-home", {restId, restDetails, categories });
+		}
+	);
 
 
 router.get
-(
-	"/checkout",
-	(req, res) =>
-	{
-		res.render("checkout");
-	}
-);
+	(
+		"/:restaurantId/dishes/:categoryId",
+		async (req, res) => {
+			let restId = req.params.restaurantId;
+			const categoryId = req.params.categoryId;
+
+			console.log(restId);
+			console.log(categoryId);
+
+			const restDetails = await firestore
+				.collection("restaurants")
+				.doc(restId)
+				.get()
+				.then(e => e.data());
+
+			const category = restDetails.categories.filter((item) => item.category == categoryId)
+			const dishes = restDetails.dishes.filter((item) => item.category == categoryId)
+			 
+			console.log(category);
+			console.log(dishes);
+
+
+			res.render("dishes", { restDetails, category, dishes });
+		}
+	);
+
+
+router.get
+	(
+		"/checkout",
+		(req, res) => {
+			res.render("checkout");
+		}
+	);
 
 
 

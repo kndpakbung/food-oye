@@ -8,26 +8,18 @@ const app = express();
 
 
 // Firebase Node.js Admin SDK
-const firebase = require("firebase-admin");
-const key = {
-	"type": process.env.TYPE,
-	"project_id": process.env.PROJECT_ID,
-	"private_key_id": process.env.PRIVATE_KEY_ID,
-	"private_key": process.env.PRIVATE_KEY.replace(/\\n/g, "\n"),
-	"client_id": process.env.CLIENT_ID,
-	"client_email": process.env.CLIENT_EMAIL,
-	"auth_uri": process.env.AUTH_URI,
-	"token_uri": process.env.TOKEN_URI,
-	"auth_provider_x509_cert_url": process.env.AUTH_PROVIDER,
-	"client_x509_cert_url": process.env.CLIENT_URL
-}
-//Initialize Firebase app
-firebase.initializeApp({
-  credential: firebase.credential.cert(key),
-  databaseURL: "https://food-oye-d8e3b.firebaseio.com"
+
+var admin = require("firebase-admin");
+
+var serviceAccount = require("./steadfast-helix-286905-8469a2fb11a1.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://steadfast-helix-286905.firebaseio.com"
 });
+
 // Firebase products used
-const firestore = firebase.firestore();
+const firestore = admin.firestore();
 
 
 
