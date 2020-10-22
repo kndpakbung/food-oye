@@ -6,13 +6,19 @@ const router = express.Router();
 
 
 
+router.get
+	(
+		"/checkout",
+		(req, res) => {
+			res.render("checkout");
+		}
+	);
 
 router.get
 	(
 		"/:restaurantId",
 		async (req, res) => {
 			let restId = req.params.restaurantId;
-			
 
 			const restDetails = await firestore
 				.collection("restaurants")
@@ -53,15 +59,6 @@ router.get
 
 
 			res.render("dishes", { restDetails, category, dishes });
-		}
-	);
-
-
-router.get
-	(
-		"/checkout",
-		(req, res) => {
-			res.render("checkout");
 		}
 	);
 

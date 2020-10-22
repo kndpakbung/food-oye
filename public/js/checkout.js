@@ -11,9 +11,9 @@ window.addEventListener
 	{
 		const dishes = JSON.parse(sessionStorage.getItem("fo_dishes"));
 		if(dishes && dishes.length > 0){
-			const details = await fetch
+			const response = await fetch
 			(
-				"/endpoints/dishRestDetails",
+				`/endpoints/pH1fPqqzh4FVxYNcC3Uk/dishRestDetails`,
 				{
 					method: "POST",
 					headers: {
@@ -21,8 +21,10 @@ window.addEventListener
 					},
 					body: JSON.stringify({ dishes })
 				}
-			)
-			.then((allDetails) => allDetails.json());
+			);
+
+			const details = await response.json();
+			console.log('detail', details)
 
 			for(let i = 0; i < details.dishRestDetails.length; i++)
 			{
@@ -54,19 +56,19 @@ window.addEventListener
 function makeRow(obj)
 {
 	const rowDiv = createElement("div.cart-row", null, {
-		"data-dish-price": obj.dishDetails.price
+		"data-dish-price": obj.price
 	});
 
 	createElement("span.cart-item-title.cart-column", rowDiv, {
-		innerText: obj.dishDetails.name
+		innerText: obj.name
 	});
 	
 	createElement("span.cart-item-title.cart-column", rowDiv, {
-		innerText: obj.restDetails.name
+		innerText: obj.name
 	});
 
 	createElement("span.cart-price.cart-column", rowDiv, {
-		innerText: "₹" + obj.dishDetails.price
+		innerText: "₹" + obj.price
 	});
 
 
@@ -88,7 +90,7 @@ function makeRow(obj)
 		updateTotalPrice();
 		
 		const currSessionStorage = JSON.parse(sessionStorage.getItem("fo_dishes"));
-		const newSessionStorage = currSessionStorage.filter(id => obj.dishDetails.id != id);
+		const newSessionStorage = currSessionStorage.filter(id => obj.id != id);
 		sessionStorage.setItem("fo_dishes", JSON.stringify(newSessionStorage));
 	});
 
