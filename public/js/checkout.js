@@ -38,19 +38,7 @@ window.addEventListener
 );
 
 
-/* <div class="cart-row" data-dish-price="dvnd">
-	<span class="cart-item-title cart-column">pnr pasanda</span>
 
-	<span class="cart-item-title cart-column">Hotel</span>
-
-	<span class="cart-price cart-column">₹190</span>
-
-	<div class="cart-quantity cart-column">
-		<input class="cart-quantity-input" type="number" value="1">
-
-		<button class="btn btn-danger" type="button">Remove</button>
-	</div>
-</div> */
 
 
 function makeRow(obj)
@@ -68,7 +56,7 @@ function makeRow(obj)
 	});
 
 	createElement("span.cart-price.cart-column", rowDiv, {
-		innerText: "₹" + obj.price
+		innerText: "฿" + obj.price
 	});
 
 
@@ -128,9 +116,10 @@ function createElement(selector, parent, attributes = {})
 function updateTotalPrice()
 {
 	let totalPrice = 0;
+	let serviceCharge = 5;
 
 	for(let i = 0; i < dishRows.length; i++)
-		totalPrice += dishRows[i].dataset.dishPrice * dishRows[i].querySelector(".cart-quantity-input").value;	
+		totalPrice += dishRows[i].dataset.dishPrice * dishRows[i].querySelector(".cart-quantity-input").value + serviceCharge;	
 
-	cartTotalPrice.innerText = "₹" + totalPrice;
+	cartTotalPrice.innerText = "฿" + totalPrice;
 }
