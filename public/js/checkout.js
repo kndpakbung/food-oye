@@ -5,44 +5,41 @@ let dishRows = [];
 
 
 window.addEventListener
-(
-	"load",
-	async () =>
-	{
-		const dishes = JSON.parse(sessionStorage.getItem("fo_dishes"));
-		if(dishes && dishes.length > 0){
-			const response = await fetch
-			(
-				`/endpoints/pH1fPqqzh4FVxYNcC3Uk/dishRestDetails`,
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json"
-					},
-					body: JSON.stringify({ dishes })
+	(
+		"load",
+		async () => {
+			const dishes = JSON.parse(sessionStorage.getItem("fo_dishes"));
+			if (dishes && dishes.length > 0) {
+				const response = await fetch
+					(
+						`/endpoints/pH1fPqqzh4FVxYNcC3Uk/dishRestDetails`,
+						{
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json"
+							},
+							body: JSON.stringify({ dishes })
+						}
+					);
+
+				const details = await response.json();
+				console.log('detail', details)
+
+				for (let i = 0; i < details.dishRestDetails.length; i++) {
+					dishRows[i] = makeRow(details.dishRestDetails[i]);
+					cartItems.appendChild(dishRows[i]);
 				}
-			);
-
-			const details = await response.json();
-			console.log('detail', details)
-
-			for(let i = 0; i < details.dishRestDetails.length; i++)
-			{
-				dishRows[i] = makeRow(details.dishRestDetails[i]);
-				cartItems.appendChild(dishRows[i]);
 			}
+
+			updateTotalPrice();
 		}
-		
-		updateTotalPrice();
-	}
-);
+	);
 
 
 
 
 
-function makeRow(obj)
-{
+function makeRow(obj) {
 	const rowDiv = createElement("div.cart-row", null, {
 		"data-dish-price": obj.price
 	});
@@ -50,7 +47,7 @@ function makeRow(obj)
 	createElement("span.cart-item-title.cart-column", rowDiv, {
 		innerText: obj.name
 	});
-	
+
 	createElement("span.cart-item-title.cart-column", rowDiv, {
 		innerText: obj.name
 	});
@@ -76,7 +73,7 @@ function makeRow(obj)
 
 		dishRows = dishRows.filter(e => !rowDiv.isSameNode(e));
 		updateTotalPrice();
-		
+
 		const currSessionStorage = JSON.parse(sessionStorage.getItem("fo_dishes"));
 		const newSessionStorage = currSessionStorage.filter(id => obj.id != id);
 		sessionStorage.setItem("fo_dishes", JSON.stringify(newSessionStorage));
@@ -86,25 +83,24 @@ function makeRow(obj)
 }
 
 
-function createElement(selector, parent, attributes = {})
-{
+function createElement(selector, parent, attributes = {}) {
 	let classes = selector.split(".");
 
 	let tagAndId = classes.shift();
 	let [tag, id] = tagAndId.split("#");
-	
+
 	let element = document.createElement(tag);
 
-	if(id)
+	if (id)
 		element.id = id;
-	if(classes.length)
+	if (classes.length)
 		element.classList.add(...classes);
-	
-	if(parent)
+
+	if (parent)
 		parent.appendChild(element);
-	
-	for(let k in attributes)
-		if(k in element)
+
+	for (let k in attributes)
+		if (k in element)
 			element[k] = attributes[k];
 		else
 			element.setAttribute(k, attributes[k]);
@@ -113,13 +109,13 @@ function createElement(selector, parent, attributes = {})
 }
 
 
-function updateTotalPrice()
-{
+function updateTotalPrice() {
 	let totalPrice = 0;
 	let serviceCharge = 5;
 
-	for(let i = 0; i < dishRows.length; i++)
-		totalPrice += dishRows[i].dataset.dishPrice * dishRows[i].querySelector(".cart-quantity-input").value + serviceCharge;	
+	for (let i = 0; i < dishRows.length; i++)
+		totalPrice += dishRows[i].dataset.dishPrice * dishRows[i].querySelector(".cart-quantity-input").value + serviceCharge;
 
 	cartTotalPrice.innerText = "฿" + totalPrice;
 }
+

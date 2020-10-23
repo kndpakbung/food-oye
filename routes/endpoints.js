@@ -9,10 +9,10 @@ const router = express.Router();
 
 router.post
 (	
-	"/:restId/dishRestDetails",
+	"/:restaurantId/dishRestDetails",
 	async (req, res) =>
 	{
-		const restId = req.params.restId;		
+		const restId = req.params.restaurantId;		
 		const dishIdArr = req.body.dishes;
 		
 		const restDetail = await firestore
