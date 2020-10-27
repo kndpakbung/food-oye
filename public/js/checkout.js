@@ -4,40 +4,33 @@ const cartTotalPrice = document.querySelector(".cart-total-price");
 let dishRows = [];
 
 
-window.addEventListener
-	(
-		"load",
-		async () => {
-			const dishes = JSON.parse(sessionStorage.getItem("fo_dishes"));
-			if (dishes && dishes.length > 0) {
-				const response = await fetch
-					(
-						`/endpoints/pH1fPqqzh4FVxYNcC3Uk/dishRestDetails`,
-						{
-							method: "POST",
-							headers: {
-								"Content-Type": "application/json"
-							},
-							body: JSON.stringify({ dishes })
-						}
-					);
-
-				const details = await response.json();
-				console.log('detail', details)
-
-				for (let i = 0; i < details.dishRestDetails.length; i++) {
-					dishRows[i] = makeRow(details.dishRestDetails[i]);
-					cartItems.appendChild(dishRows[i]);
+window.addEventListener("load", async () => {
+	const dishes = JSON.parse(sessionStorage.getItem("fo_dishes"));
+	if (dishes && dishes.length > 0) {
+		const response = await fetch
+			( //เปลี่ยนไอดีร้าน
+				`/endpoints/pH1fPqqzh4FVxYNcC3Uk/dishRestDetails`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({ dishes })
 				}
-			}
+			);
 
-			updateTotalPrice();
+		const details = await response.json();
+		console.log('detail', details)
+
+		for (let i = 0; i < details.dishRestDetails.length; i++) {
+			dishRows[i] = makeRow(details.dishRestDetails[i]);
+			cartItems.appendChild(dishRows[i]);
 		}
-	);
+	}
 
-
-
-
+	updateTotalPrice();
+}
+);
 
 function makeRow(obj) {
 	const rowDiv = createElement("div.cart-row", null, {
@@ -118,4 +111,24 @@ function updateTotalPrice() {
 
 	cartTotalPrice.innerText = "฿" + totalPrice;
 }
+
+function onPlace_Order() {
+	const cus_name = document.getElementById('name').value;
+	const cus_phoneno = document.getElementById('phoneno').value;
+	const currSessionStorage = JSON.parse(sessionStorage.getItem("fo_dishes"));
+	// const newSessionStorage = currSessionStorage.filter(id => obj.id != id);
+	
+	
+	if (typeof(Storage) !== "undefined") {
+		sessionStorage.setItem('name', cus_name);
+		sessionStorage.setItem('phoneno', cus_phoneno);
+		sessionStorage.setItem("fo_dishes", JSON.stringify(currSessionStorage));
+		
+		alert('data added in session storage');
+	  } else {
+		alert('session storage not supported');
+	  }
+
+}
+
 

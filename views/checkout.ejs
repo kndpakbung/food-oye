@@ -6,30 +6,28 @@
 <div class="container">
 	<h2 id="title" class="section-header">PERSONAL DETAILS</h2>
 
-	<form action="/restaurant/checkout" method="POST">
-		<div id="details"><p>
-			NAME <br class="d-block d-sm-none"><input type="text" id="name"><p></p>
-			PHONE NO.<br class="d-block d-sm-none"><input type="number" id="phoneno"><p></p>
-			
-		</p>
+	<form>
+		<div id="details">
+			<p>NAME <br class="d-block d-sm-none"><input type="text" id="name" name="name"></p>
+			<p>PHONE NO.<br class="d-block d-sm-none"><input type="tel" id="phoneno" name="phoneno"></p>
 	
-		<section class="container content-section">
-			<h2 class="section-header">YOUR CART</h2>
-			
-			<div class="cart-row">
-				<span class="cart-item cart-header cart-column">ITEM</span>
-				<span class="cart-item cart-header cart-column">HOTEL</span>
-				<span class="cart-price cart-header cart-column">PRICE</span>
-				<span class="cart-quantity cart-header cart-column">QUANTITY</span>
-			</div>
+			<section class="container content-section">
+				<h2 class="section-header">YOUR CART</h2>
 
-			<div class="cart-items"></div>
-			  
-			<div class="cart-total">
-				<strong class="cart-total-title">Total</strong>
-				<span class="cart-total-price"></span>
-			</div>
-			<button class="btn btn-primary btn-purchase" type="submit">PLACE ORDER</button>
-		</section>
+				<div class="cart-row">
+					<span class="cart-item cart-header cart-column">ITEM</span>
+					<span class="cart-item cart-header cart-column">HOTEL</span>
+					<span class="cart-price cart-header cart-column">PRICE</span>
+					<span class="cart-quantity cart-header cart-column">QUANTITY</span>
+				</div>
+
+				<div class="cart-items"></div>
+
+				<div class="cart-total">
+					<strong class="cart-total-title">Total</strong>
+					<span class="cart-total-price"></span>
+				</div>
+				<input value="PLACE ORDER" class="btn btn-primary btn-purchase" type="button" onclick="onPlace_Order()">
+			</section>
 	</form>
 </div>

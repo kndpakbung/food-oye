@@ -18,25 +18,6 @@ for(let i = 0; i < button.length; i++)
 		() =>
 		{
 			let dishId = button[i].value;
-			// let isPresent = false;
-			// for(let j = 0; j < dishesLength; j++)
-			// {
-			// 	if(dishId === dishes[j])
-			// 	{
-			// 		isPresent = true;
-			// 		break;
-			// 	}
-			// }
-
-			// if(isPresent === false)
-			// {
-			// 	dishes.push(dishId);
-			// 	button[i].innerHTML="ADDED";
-			// 	dishCounter++;
-			// 	dishCount.innerText = dishCounter;
-			// 	// button[i].disabled = true;
-			// 	sessionStorage.setItem("fo_dishes", JSON.stringify(dishes));
-			// }
 
 			if(button[i].innerText === "ADD TO CART")
 			{

@@ -1,62 +1,12 @@
 const express = require("express");
 const firebase = require("firebase-admin");
 const firestore = firebase.firestore();
-
 const router = express.Router();
 
-
-
-router.get
-	(
-		"/checkout",
-		(req, res) => {
-			res.render("checkout");
-		}
-	);
-
-router.post("/checkout", (req, res) => {
-	const d = new Date()
-	const t = d.getTime();
-	const orderId = 'Cus' + d + t - 300;
-	const newOrder = ({
-		name: req.body.name,
-		phoneno: req.body.phoneno
-
-	})
-	storeData().then(result => {
-		const orderRef = firestore.collection('orders').add({
-			id: orderId,
-			name: newOrder.name,
-			phoneno: newOrder.phoneno,
-			userDate: d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear(),
-			hour: d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds(),
-			userYear: d.getFullYear(),
-		});
-		console.log('Added document with ID: ', orderRef.id);
-		res.redirect("/");
-	}).catch((err) => {
-		console.log('Error occured', err);
-
-	}).catch(err => {
-		console.log("No data inserted");
-		res.redirect("#");
-	});
-	//Promise
-	function storeData() {
-		console.log(newOrder);
-		return new Promise((resolve, reject) => {
-			if (Object.entries(newOrder).length === 0 && newOrder.constructor === Object) {
-				reject(null);
-			}
-			else {
-				resolve(newOrder);
-			}
-		})
-	}
-
-
-});
-
+router.get("/checkout", async (req, res) => {
+	res.render("checkout");
+}
+);
 
 router.get
 	(
@@ -78,6 +28,23 @@ router.get
 		}
 	);
 
+router.post("/checkout", async (req, res) => {
+	const d = new Date();
+	const t = d.getTime();
+	const id = t - 300;
+	const data = {
+		order_id: id,
+		cus_name: req.body.name,
+		cus_phoneno: req.body.phoneno,
+		order_Date: d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear(),
+		order_Time: d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds()
+
+	};
+	const orderRef = await firestore.collection("orders").add(data);
+	console.log('Set: ', orderRef);
+	res.redirect('/')
+
+});
 
 router.get
 	(
@@ -105,10 +72,5 @@ router.get
 			res.render("dishes", { restDetails, category, dishes });
 		}
 	);
-
-
-
-
-
 
 module.exports = router;
