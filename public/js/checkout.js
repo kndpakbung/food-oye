@@ -4,7 +4,7 @@ const cartTotalPrice = document.querySelector(".cart-total-price");
 let dishRows = [];
 
 
-window.addEventListener("load", async () => {
+window.addEventListener("load", async function onPlace_Order()  {
 	const dishes = JSON.parse(sessionStorage.getItem("fo_dishes"));
 	if (dishes && dishes.length > 0) {
 		const response = await fetch
@@ -112,23 +112,28 @@ function updateTotalPrice() {
 	cartTotalPrice.innerText = "฿" + totalPrice;
 }
 
-function onPlace_Order() {
+async function onPlace_Order() {
 	const cus_name = document.getElementById('name').value;
 	const cus_phoneno = document.getElementById('phoneno').value;
-	const currSessionStorage = JSON.parse(sessionStorage.getItem("fo_dishes"));
-	// const newSessionStorage = currSessionStorage.filter(id => obj.id != id);
-	
-	
+	const dishes = JSON.parse(sessionStorage.getItem("fo_dishes"));
+	const d = new Date();
+	const t = d.getTime();
+	const id = t - 300;
+
+
 	if (typeof(Storage) !== "undefined") {
+		sessionStorage.setItem('order_id', id);
 		sessionStorage.setItem('name', cus_name);
 		sessionStorage.setItem('phoneno', cus_phoneno);
-		sessionStorage.setItem("fo_dishes", JSON.stringify(currSessionStorage));
-		
+		sessionStorage.setItem('order_Date', d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear());
+		sessionStorage.setItem('order_Time', d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
+		sessionStorage.setItem("fo_dishes", JSON.stringify(dishes));
 		alert('data added in session storage');
 	  } else {
 		alert('session storage not supported');
 	  }
 
 }
+
 
 

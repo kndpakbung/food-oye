@@ -1,12 +1,12 @@
 <%- contentFor("headContent") %>
 <title>Checkout</title>
-<script defer src="/public/js/checkout.js"></script>
+
 
 <%- contentFor("bodyContent") %>
 <div class="container">
 	<h2 id="title" class="section-header">PERSONAL DETAILS</h2>
 
-	<form>
+	<form id="formCart">
 		<div id="details">
 			<p>NAME <br class="d-block d-sm-none"><input type="text" id="name" name="name"></p>
 			<p>PHONE NO.<br class="d-block d-sm-none"><input type="tel" id="phoneno" name="phoneno"></p>
@@ -31,3 +31,5 @@
 			</section>
 	</form>
 </div>
+
+<script defer src="/public/js/checkout.js"></script>
