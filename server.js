@@ -1,6 +1,7 @@
 const expressLayouts = require("express-ejs-layouts");
 require('dotenv').config();
 const express = require("express");
+const session = require("express-session");
 
 const app = express();
 
@@ -33,7 +34,13 @@ app.set("view engine", "ejs");
 // Body parser
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-
+//session
+app.use(session({ 
+	secret: 'keyboard cat', 
+	resave: false, 
+	saveUninitialized: true
+   })
+  )
 
 
 //Routes

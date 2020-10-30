@@ -13,7 +13,8 @@ router.get
 		"/:restaurantId",
 		async (req, res) => {
 			let restId = req.params.restaurantId;
-
+			
+			
 			const restDetails = await firestore
 				.collection("restaurants")
 				.doc(restId)
@@ -23,6 +24,7 @@ router.get
 			const categories = restDetails.categories;
 			console.log(categories);
 			console.log(restDetails.categories);
+			
 
 			res.render("restaurant-home", { restId, restDetails, categories });
 		}
@@ -32,12 +34,14 @@ router.post("/checkout", async (req, res) => {
 	const d = new Date();
 	const t = d.getTime();
 	const id = t - 300;
+	const dishes = req.session
 	const data = {
 		order_id: id,
 		cus_name: req.body.name,
 		cus_phoneno: req.body.phoneno,
 		order_Date: d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear(),
-		order_Time: d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds()
+		order_Time: d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds(),
+		// order: dishes
 
 	};
 	const orderRef = await firestore.collection("orders").add(data);
@@ -45,6 +49,7 @@ router.post("/checkout", async (req, res) => {
 	res.redirect('/')
 
 });
+
 
 router.get
 	(

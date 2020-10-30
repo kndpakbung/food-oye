@@ -5,11 +5,14 @@ let dishRows = [];
 
 
 window.addEventListener("load", async function onPlace_Order()  {
-	const dishes = JSON.parse(sessionStorage.getItem("fo_dishes"));
+	const restIdPath = window.location.pathname.split("/");
+	const restId = restIdPath[4];
+	 const dishes = JSON.parse(sessionStorage.getItem("fo_dishes"));
+	
 	if (dishes && dishes.length > 0) {
 		const response = await fetch
 			( //เปลี่ยนไอดีร้าน
-				`/endpoints/pH1fPqqzh4FVxYNcC3Uk/dishRestDetails`,
+				`/endpoints/${restId}/dishRestDetails`,
 				{
 					method: "POST",
 					headers: {
@@ -112,28 +115,28 @@ function updateTotalPrice() {
 	cartTotalPrice.innerText = "฿" + totalPrice;
 }
 
-async function onPlace_Order() {
-	const cus_name = document.getElementById('name').value;
-	const cus_phoneno = document.getElementById('phoneno').value;
-	const dishes = JSON.parse(sessionStorage.getItem("fo_dishes"));
-	const d = new Date();
-	const t = d.getTime();
-	const id = t - 300;
+// async function onPlace_Order() {
+// 	const cus_name = document.getElementById('name').value;
+// 	const cus_phoneno = document.getElementById('phoneno').value;
+// 	const dishes = JSON.parse(sessionStorage.getItem("fo_dishes"));
+// 	const d = new Date();
+// 	const t = d.getTime();
+// 	const id = t - 300;
 
 
-	if (typeof(Storage) !== "undefined") {
-		sessionStorage.setItem('order_id', id);
-		sessionStorage.setItem('name', cus_name);
-		sessionStorage.setItem('phoneno', cus_phoneno);
-		sessionStorage.setItem('order_Date', d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear());
-		sessionStorage.setItem('order_Time', d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
-		sessionStorage.setItem("fo_dishes", JSON.stringify(dishes));
-		alert('data added in session storage');
-	  } else {
-		alert('session storage not supported');
-	  }
+// 	if (typeof(Storage) !== "undefined") {
+// 		sessionStorage.setItem('order_id', id);
+// 		sessionStorage.setItem('name', cus_name);
+// 		sessionStorage.setItem('phoneno', cus_phoneno);
+// 		sessionStorage.setItem('order_Date', d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear());
+// 		sessionStorage.setItem('order_Time', d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
+// 		sessionStorage.setItem("fo_dishes", JSON.stringify(dishes));
+// 		alert('data added in session storage');
+// 	  } else {
+// 		alert('session storage not supported');
+// 	  }
 
-}
+// }
 
 
 
