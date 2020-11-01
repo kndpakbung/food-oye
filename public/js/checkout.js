@@ -4,15 +4,17 @@ const cartTotalPrice = document.querySelector(".cart-total-price");
 let dishRows = [];
 
 
-window.addEventListener("load", async function onPlace_Order()  {
-	const restIdPath = window.location.pathname.split("/");
-	const restId = restIdPath[4];
-	 const dishes = JSON.parse(sessionStorage.getItem("fo_dishes"));
-	
+window.addEventListener("load", async function onPlace_Order() {
+
+	const dishes = JSON.parse(sessionStorage.getItem("fo_dishes"));
+
 	if (dishes && dishes.length > 0) {
+		// const restIdPath = window.location.pathname.split("/");
+		// const restId = restIdPath[2];
+		// console.log(restId);
 		const response = await fetch
 			( //เปลี่ยนไอดีร้าน
-				`/endpoints/${restId}/dishRestDetails`,
+				`/endpoints/pH1fPqqzh4FVxYNcC3Uk/dishRestDetails`,
 				{
 					method: "POST",
 					headers: {
@@ -23,6 +25,7 @@ window.addEventListener("load", async function onPlace_Order()  {
 			);
 
 		const details = await response.json();
+		//log Order Details
 		console.log('detail', details)
 
 		for (let i = 0; i < details.dishRestDetails.length; i++) {
@@ -37,6 +40,7 @@ window.addEventListener("load", async function onPlace_Order()  {
 
 function makeRow(obj) {
 	const rowDiv = createElement("div.cart-row", null, {
+		"data-dish-id": obj.id,
 		"data-dish-price": obj.price
 	});
 
@@ -109,34 +113,45 @@ function updateTotalPrice() {
 	let totalPrice = 0;
 	let serviceCharge = 5;
 
-	for (let i = 0; i < dishRows.length; i++)
+	for (let i = 0; i < dishRows.length; i++) {
 		totalPrice += dishRows[i].dataset.dishPrice * dishRows[i].querySelector(".cart-quantity-input").value + serviceCharge;
-
+	}
 	cartTotalPrice.innerText = "฿" + totalPrice;
 }
 
-// async function onPlace_Order() {
-// 	const cus_name = document.getElementById('name').value;
-// 	const cus_phoneno = document.getElementById('phoneno').value;
-// 	const dishes = JSON.parse(sessionStorage.getItem("fo_dishes"));
-// 	const d = new Date();
-// 	const t = d.getTime();
-// 	const id = t - 300;
+async function onPlace_Order() {
+	const cus_name = document.getElementById('name').value;
+	const cus_phoneno = document.getElementById('phoneno').value;
+	const d = new Date();
+	const t = d.getTime();
 
+	let restDish = []
 
-// 	if (typeof(Storage) !== "undefined") {
-// 		sessionStorage.setItem('order_id', id);
-// 		sessionStorage.setItem('name', cus_name);
-// 		sessionStorage.setItem('phoneno', cus_phoneno);
-// 		sessionStorage.setItem('order_Date', d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear());
-// 		sessionStorage.setItem('order_Time', d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
-// 		sessionStorage.setItem("fo_dishes", JSON.stringify(dishes));
-// 		alert('data added in session storage');
-// 	  } else {
-// 		alert('session storage not supported');
-// 	  }
+	for (let i = 0; i < dishRows.length; i++) {
+		restDish.push({
+			id: dishRows[i].dataset.dishId,
+			qty: dishRows[i].querySelector(".cart-quantity-input").value || 1
+		})
+	}
 
-// }
+	console.log(restDish);
+	console.log(cus_name);
+	console.log(cus_phoneno);
+
+	const response = await fetch
+		( //เปลี่ยนไอดีร้าน
+			`/endpoints/pH1fPqqzh4FVxYNcC3Uk/order`,
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify({ restDish,cus_name,cus_phoneno })
+			}
+		);
+
+	console.log('response :',response);
+}
 
 
 
